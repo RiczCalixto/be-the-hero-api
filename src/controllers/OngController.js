@@ -1,12 +1,12 @@
+// Arquivo responsável pela criação e listagem de ongs existentes
+
 const crypto = require("crypto");
 const connection = require("../database/connection");
 
 module.exports = {
   async create(req, res) {
     const { name, email, whatsapp, city, uf } = req.body;
-
     const id = crypto.randomBytes(4).toString("HEX");
-
     await connection("ongs").insert({
       id,
       name,
