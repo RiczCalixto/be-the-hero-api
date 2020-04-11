@@ -11,46 +11,42 @@ const routes = express.Router();
 routes.post("/sessions", SessionController.create);
 
 routes.get("/ongs", OngController.list);
+
 routes.post(
   "/ongs",
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      name: Joi.string().required(),
-      email: Joi.string()
-        .required()
-        .email(),
-      whatsapp: Joi.number()
-        .required()
-        .min(10)
-        .max(11),
+      name: Joi.string().required().min(2),
+      email: Joi.string().required().email(),
+      whatsapp: Joi.required(),
       city: Joi.string().required(),
-      uf: Joi.string()
-        .required()
-        .length(2)
-    })
+      uf: Joi.string().required().length(2),
+    }),
   }),
   OngController.create
 );
 
 routes.post("/incidents", IncidentController.create);
+
 routes.get(
   "/incidents",
   celebrate({
     [Segments.QUERY]: Joi.object().keys({
-      page: Joi.number()
-    })
+      page: Joi.number(),
+    }),
   }),
   IncidentController.list
 );
+
 routes.delete(
   "/incidents/:id",
   celebrate({
     [Segments.HEADERS]: Joi.object({
-      authorization: Joi.string().required()
+      authorization: Joi.string().required(),
     }).unknown(),
     [Segments.PARAMS]: Joi.object().keys({
-      id: Joi.number().required()
-    })
+      id: Joi.number().required(),
+    }),
   }),
   IncidentController.delete
 );
@@ -59,8 +55,8 @@ routes.get(
   "/profile",
   celebrate({
     [Segments.HEADERS]: Joi.object({
-      authorization: Joi.string().required()
-    }).unknown()
+      authorization: Joi.string().required(),
+    }).unknown(),
   }),
   ProfileController.listSpecificOngIncidents
 );
